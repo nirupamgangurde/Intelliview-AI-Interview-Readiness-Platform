@@ -1,0 +1,5 @@
+intelliview
+.env
+.dockerignore
+Dockerfile
+__pycache__
