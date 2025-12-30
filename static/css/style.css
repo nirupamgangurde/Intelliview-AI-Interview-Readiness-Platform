@@ -1,0 +1,100 @@
+body {
+    background-color: #ffffff;
+    color: #0f172a;
+    cursor: default;
+}
+
+/* Canvas - Fixed Background */
+#interactive-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Magnetic Button Wrapper */
+.magnetic-wrap {
+    display: inline-block;
+    position: relative;
+    z-index: 10;
+}
+
+/* 3D Tilt Card Styles */
+.tilt-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.tilt-card:hover {
+    box-shadow: 0 20px 40px -10px rgba(2, 132, 199, 0.1);
+    border-color: #cbd5e1;
+    z-index: 20;
+}
+
+/* Internal shine effect */
+.tilt-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.8) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+.tilt-card:hover::after {
+    opacity: 1;
+}
+
+/* Gradient Text Animation */
+.animate-gradient-text {
+    background: linear-gradient(
+        to right,
+        #0f172a 20%,
+        #0284c7 40%,
+        #0369a1 60%,
+        #0f172a 80%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;      /* for WebKit */
+    color: transparent;                 /* standard fallback */
+    -webkit-text-fill-color: transparent; /* WebKit-specific */
+    animation: text-shimmer 6s linear infinite;
+}
+
+/* Reveal Animation */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-up.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Grid Background */
+.bg-grid {
+    background-size: 60px 60px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* Footer Pattern */
+.tech-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
