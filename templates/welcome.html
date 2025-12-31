@@ -1,13 +1,223 @@
 {% extends "base.html" %}
 
-{% block title %}Welcome - Intelliview AI{% endblock %}
+{% block title %}Dashboard - Intelliview AI{% endblock %}
 
 {% block content %}
-<main class="min-h-screen flex items-center justify-center">
-  <div class="bg-white p-8 rounded-xl shadow-md text-center">
-    <h2 class="text-2xl font-bold mb-2">Login successful, {{ name }}!</h2>
-    <p class="text-sm text-slate-600 mb-4">Welcome to Intelliview AI.</p>
-    <a href="{{ url_for('home') }}" class="inline-block bg-brand-600 text-white px-4 py-2 rounded">Go to Home</a>
-  </div>
-</main>
+    <div class="flex h-screen overflow-hidden relative z-10">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white/80 backdrop-blur-xl border-r border-slate-200 hidden md:flex flex-col h-full">
+            <div class="p-6">
+                <a href="/" class="flex items-center gap-3 group">
+                    <div class="w-8 h-8 bg-brand-900 rounded-lg flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+                        <i class="ph-bold ph-squares-four text-lg"></i>
+                    </div>
+                    <span class="font-display font-bold text-lg text-slate-900">Intelliview</span>
+                </a>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 mt-4">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-medium transition-colors">
+                    <i class="ph-bold ph-house text-xl"></i> Dashboard
+                </a>
+                <a href="#question-bank" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
+                    <i class="ph-bold ph-upload-simple text-xl"></i> Question Bank
+                </a>
+                <a href="#interview-setup" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
+                    <i class="ph-bold ph-gear text-xl"></i> Setup Interview
+                </a>
+            </nav>
+            <div class="p-4 border-t border-slate-200">
+                <a href="{{ url_for('home') }}" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:text-red-600 transition-colors">
+                    <i class="ph-bold ph-sign-out text-xl"></i> Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-10 scroll-smooth">
+            
+            <header class="flex justify-between items-end mb-10 opacity-0 animate-slide-up-fade">
+                <div>
+                    <h1 class="font-display text-3xl font-bold text-slate-900">Hello, {{ name }} 👋</h1>
+                    <p class="text-slate-500 mt-1">Select a mode to start your interview practice.</p>
+                </div>
+            </header>
+
+            <!-- 1. Question Bank Section -->
+            <section id="question-bank" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 100ms;">
+                <h2 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs"><i class="ph-bold ph-files"></i></span>
+                    Step 1: Upload Content
+                </h2>
+                
+                <div class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm hover:border-brand-300 transition-all group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-teal-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+                    
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-slate-900 text-xl mb-2">Upload Question Bank</h3>
+                            <p class="text-slate-500 text-sm mb-4 leading-relaxed">
+                                Upload your specific questions (CSV/JSON) for the AI to use. Without this, the AI will use general interview questions.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-[10px] uppercase font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">CSV Supported</span>
+                                <span class="text-[10px] uppercase font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">JSON Supported</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-1/3">
+                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-brand-400 transition-all group/upload">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="ph-bold ph-cloud-arrow-up text-3xl text-slate-400 mb-2 group-hover/upload:text-brand-600 transition-colors"></i>
+                                    <p class="text-sm text-slate-500 font-medium">Click to upload file</p>
+                                </div>
+                                <input id="dropzone-file" type="file" class="hidden" />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Interview Setup Section (NEW) -->
+            <section id="interview-setup" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 150ms;">
+                <h2 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs"><i class="ph-bold ph-gear"></i></span>
+                    Step 2: Configure Interview
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Context Uploads -->
+                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
+                        <h3 class="font-bold text-slate-900 mb-4">Context</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Job Description</label>
+                                <textarea class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:border-brand-500 focus:outline-none h-24 resize-none" placeholder="Paste the job description here..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Resume</label>
+                                <div class="flex items-center gap-3">
+                                    <button class="flex-1 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-100 transition-colors text-left flex items-center gap-2">
+                                        <i class="ph-bold ph-paperclip"></i> Upload PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
+                        <h3 class="font-bold text-slate-900 mb-4">Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Difficulty Level</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all font-medium">Easy</button>
+                                    <button class="bg-white border-brand-500 text-brand-600 bg-brand-50 py-2 rounded-lg text-sm font-bold shadow-sm ring-1 ring-brand-500">Medium</button>
+                                    <button class="bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm hover:border-red-500 hover:text-red-600 hover:bg-red-50 transition-all font-medium">Hard</button>
+                                </div>
+                            </div>
+                             <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Focus Area</label>
+                                <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none">
+                                    <option>General</option>
+                                    <option>Data Structures & Algorithms</option>
+                                    <option>System Design</option>
+                                    <option>Behavioral</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Practice Modes Section -->
+            <section id="practice-modes" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 200ms;">
+                <h2 class="font-display text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs"><i class="ph-bold ph-play"></i></span>
+                    Step 3: Start Interview
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Text / Chatbot Mode (Chatbot Theme) -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-brand-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
+                        <div class="absolute inset-0 bg-gradient-to-b from-brand-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center">
+                                <i class="ph-fill ph-chat-centered-text text-2xl"></i>
+                            </div>
+                            <span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Chatbot</span>
+                        </div>
+                        
+                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Text Interview</h3>
+                        <p class="text-slate-500 text-sm mb-4 relative z-10">Chat-based interface similar to WhatsApp or Slack.</p>
+                        
+                        <!-- Visual representation of Chat -->
+                        <div class="mt-auto space-y-2 relative z-10">
+                            <div class="flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                                <div class="w-6 h-6 rounded-full bg-slate-200 shrink-0"></div>
+                                <div class="bg-slate-100 rounded-lg rounded-tl-none p-2 text-[10px] w-3/4 shadow-sm">Tell me about yourself.</div>
+                            </div>
+                            <div class="flex gap-2 flex-row-reverse opacity-60 group-hover:opacity-100 transition-opacity">
+                                <div class="w-6 h-6 rounded-full bg-brand-200 shrink-0"></div>
+                                <div class="bg-brand-500 text-white rounded-lg rounded-tr-none p-2 text-[10px] w-3/4 shadow-md">Hi, I'm a developer...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio Mode -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-purple-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
+                        <div class="absolute inset-0 bg-gradient-to-b from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                                <i class="ph-fill ph-microphone text-2xl"></i>
+                            </div>
+                            <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Voice Only</span>
+                        </div>
+                        
+                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Audio Interview</h3>
+                        <p class="text-slate-500 text-sm mb-4 relative z-10">Speak your answers. Good for practicing fluency.</p>
+                        
+                        <!-- Visual representation of Audio Wave -->
+                        <div class="mt-auto flex items-center justify-center gap-1 h-12 relative z-10 opacity-60 group-hover:opacity-100 transition-opacity">
+                            <div class="w-1 h-4 bg-purple-400 rounded-full animate-pulse"></div>
+                            <div class="w-1 h-8 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
+                            <div class="w-1 h-6 bg-purple-400 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+                            <div class="w-1 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.3s"></div>
+                            <div class="w-1 h-7 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.15s"></div>
+                        </div>
+                    </div>
+
+                    <!-- Video Mode -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-orange-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
+                        <div class="absolute inset-0 bg-gradient-to-b from-orange-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                                <i class="ph-fill ph-video-camera text-2xl"></i>
+                            </div>
+                            <span class="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Camera On</span>
+                        </div>
+                        
+                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Video Interview</h3>
+                        <p class="text-slate-500 text-sm mb-4 relative z-10">Full simulation with camera. AI analyzes body language.</p>
+                        
+                        <!-- Visual representation of Video Frame -->
+                        <div class="mt-auto relative z-10 opacity-60 group-hover:opacity-100 transition-opacity">
+                            <div class="bg-slate-800 rounded-lg h-24 w-full flex items-center justify-center relative overflow-hidden">
+                                <i class="ph-fill ph-user text-slate-600 text-4xl"></i>
+                                <div class="absolute bottom-2 right-2 w-6 h-4 bg-slate-600 rounded shadow border border-slate-500"></div>
+                                <div class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
 {% endblock %}

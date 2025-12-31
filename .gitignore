@@ -1,5 +1,6 @@
 intelliview
 .env
 .dockerignore
+.gitignore
 Dockerfile
 __pycache__
