@@ -9,9 +9,13 @@ let mouse = { x: -1000, y: -1000 };
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+    // Re-initialize particles on resize to maintain density
+    initParticles();
 }
 window.addEventListener('resize', resize);
-resize();
+// Initial setup
+width = canvas.width = window.innerWidth;
+height = canvas.height = window.innerHeight;
 
 window.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -179,3 +183,12 @@ function animateValue(obj, start, end, duration) {
     };
     window.requestAnimationFrame(step);
 }
+
+// Navigation handler for buttons using `data-href` instead of inline onclick
+// This avoids embedding JS/Jinja inside attributes (which can trigger editor lint/parse errors)
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-href]');
+    if (!btn) return;
+    const href = btn.getAttribute('data-href');
+    if (href) window.location.href = href;
+});

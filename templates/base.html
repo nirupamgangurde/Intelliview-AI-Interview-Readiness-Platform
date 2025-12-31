@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Intelliview AI{% endblock %}</title>
+    
+    <!-- Shared Resources -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9',
+                            600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e', 950: '#082f49',
+                        }
+                    },
+                    animation: {
+                        'text-shimmer': 'text-shimmer 3s ease-out infinite alternate',
+                        'blob': 'blob 10s infinite',
+                        'slide-up-fade': 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'shine': 'shine 3s linear infinite',
+                    },
+                    keyframes: {
+                        'text-shimmer': {
+                            'from': { 'background-position': '0 0' },
+                            'to': { 'background-position': '-200% 0' }
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        slideUpFade: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        shine: {
+                            '0%': { backgroundPosition: '200% center' },
+                            '100%': { backgroundPosition: '-200% center' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="antialiased overflow-x-hidden font-sans bg-slate-50 min-h-screen flex flex-col relative">
+
+    <!-- === GLOBAL BACKGROUND EFFECTS (Applied to all pages) === -->
+    <canvas id="interactive-canvas"></canvas>
+    <div class="fixed inset-0 bg-grid opacity-60 pointer-events-none -z-20"></div>
+    <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-brand-100/40 rounded-full mix-blend-multiply filter blur-[120px] animate-blob -z-10"></div>
+    <div class="fixed top-0 right-1/4 w-[500px] h-[500px] bg-indigo-100/40 rounded-full mix-blend-multiply filter blur-[120px] animate-blob animation-delay-2000 -z-10"></div>
+
+    <!-- Page Specific Content Goes Here -->
+    {% block content %}{% endblock %}
+
+    <!-- Global Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
