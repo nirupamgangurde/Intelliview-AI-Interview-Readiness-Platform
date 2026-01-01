@@ -6,7 +6,7 @@
     <div class="flex h-screen overflow-hidden relative z-10">
         
         <!-- Sidebar -->
-        <aside class="w-64 bg-white/80 backdrop-blur-xl border-r border-slate-200 hidden md:flex flex-col h-full">
+        <aside class="w-64 bg-white/80 backdrop-blur-xl border-r border-slate-200 hidden md:flex flex-col h-full shrink-0">
             <div class="p-6">
                 <a href="/" class="flex items-center gap-3 group">
                     <div class="w-8 h-8 bg-brand-900 rounded-lg flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
@@ -19,11 +19,8 @@
                 <a href="#" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-medium transition-colors">
                     <i class="ph-bold ph-house text-xl"></i> Dashboard
                 </a>
-                <a href="#question-bank" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
-                    <i class="ph-bold ph-upload-simple text-xl"></i> Question Bank
-                </a>
-                <a href="#interview-setup" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
-                    <i class="ph-bold ph-gear text-xl"></i> Setup Interview
+                <a href="#" onclick="resetFlow()" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
+                    <i class="ph-bold ph-play-circle text-xl"></i> Start Practice
                 </a>
             </nav>
             <div class="p-4 border-t border-slate-200">
@@ -39,185 +36,297 @@
             <header class="flex justify-between items-end mb-10 opacity-0 animate-slide-up-fade">
                 <div>
                     <h1 class="font-display text-3xl font-bold text-slate-900">Hello, {{ name }} 👋</h1>
-                    <p class="text-slate-500 mt-1">Select a mode to start your interview practice.</p>
+                    <p class="text-slate-500 mt-1">What would you like to practice today?</p>
                 </div>
             </header>
 
-            <!-- 1. Question Bank Section -->
-            <section id="question-bank" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 100ms;">
-                <h2 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs"><i class="ph-bold ph-files"></i></span>
-                    Step 1: Upload Content
-                </h2>
+            <!-- STEP 1: Choose Path -->
+            <section id="selection-flow" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 100ms;">
                 
-                <div class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm hover:border-brand-300 transition-all group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-teal-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+                <!-- Main Choice Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" id="choice-container">
                     
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="flex-1">
-                            <h3 class="font-bold text-slate-900 text-xl mb-2">Upload Question Bank</h3>
-                            <p class="text-slate-500 text-sm mb-4 leading-relaxed">
-                                Upload your specific questions (CSV/JSON) for the AI to use. Without this, the AI will use general interview questions.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-[10px] uppercase font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">CSV Supported</span>
-                                <span class="text-[10px] uppercase font-bold bg-slate-100 text-slate-500 px-2 py-1 rounded">JSON Supported</span>
+                    <!-- Choice A: Practice MCQs -->
+                    <label class="cursor-pointer group relative block h-full">
+                        <input type="radio" name="practice_mode" value="mcq" class="peer absolute inset-0 opacity-0 cursor-pointer" onchange="enableNextButton()">
+                        <div class="bg-white border-2 border-slate-200 p-8 rounded-2xl shadow-sm group-hover:border-brand-400 peer-checked:border-brand-600 peer-checked:ring-2 peer-checked:ring-brand-100 transition-all h-full flex flex-col items-center text-center relative overflow-hidden z-10 pointer-events-none">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full blur-3xl -z-10 opacity-50"></div>
+                            <div class="w-16 h-16 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-list-checks text-3xl"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-xl mb-2">Practice MCQs</h3>
+                            <p class="text-slate-500 text-sm">Upload your question bank and practice specific topics with instant scoring.</p>
+                            <div class="mt-6">
+                                <span class="text-xs font-bold text-teal-700 bg-teal-50 px-3 py-1 rounded-full">Best for Exams</span>
                             </div>
                         </div>
+                    </label>
 
-                        <div class="w-full md:w-1/3">
+                    <!-- Choice B: Full Interview -->
+                    <label class="cursor-pointer group relative block h-full">
+                        <input type="radio" name="practice_mode" value="interview" class="peer absolute inset-0 opacity-0 cursor-pointer" onchange="enableNextButton()">
+                        <div class="bg-white border-2 border-slate-200 p-8 rounded-2xl shadow-sm group-hover:border-brand-400 peer-checked:border-brand-600 peer-checked:ring-2 peer-checked:ring-brand-100 transition-all h-full flex flex-col items-center text-center relative overflow-hidden z-10 pointer-events-none">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-3xl -z-10 opacity-50"></div>
+                            <div class="w-16 h-16 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <i class="ph-bold ph-microphone-stage text-3xl"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-xl mb-2">Mock Interview</h3>
+                            <p class="text-slate-500 text-sm">Simulate a real interview with AI via Audio, Video, or Text chat.</p>
+                            <div class="mt-6">
+                                <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Best for Jobs</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Next Button Area -->
+                <div class="flex justify-end border-t border-slate-200 pt-6">
+                    <button id="btn-next-step" onclick="goToStep2()" disabled class="bg-slate-300 text-white px-8 py-3 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2 cursor-not-allowed opacity-50">
+                        Next Step <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+                </div>
+
+            </section>
+
+
+            <!-- DYNAMIC CONTENT SECTIONS (Hidden by default) -->
+            
+            <!-- 1. MCQ UPLOAD SECTION -->
+            <div id="section-mcq" class="hidden opacity-0 transition-all duration-500 ease-in-out">
+                <div class="flex items-center gap-4 mb-6">
+                    <button onclick="resetFlow()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="ph-bold ph-arrow-left text-xl"></i></button>
+                    <h2 class="font-display text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs">2</span>
+                        Upload Question Bank
+                    </h2>
+                </div>
+                
+                <div class="bg-white border border-slate-200 p-8 rounded-2xl shadow-sm relative overflow-hidden">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-slate-900 text-lg mb-2">Upload File (CSV/JSON)</h3>
+                            <p class="text-slate-500 text-sm mb-4">Our AI will ask questions serially from your file.</p>
                             <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-brand-400 transition-all group/upload">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                     <i class="ph-bold ph-cloud-arrow-up text-3xl text-slate-400 mb-2 group-hover/upload:text-brand-600 transition-colors"></i>
                                     <p class="text-sm text-slate-500 font-medium">Click to upload file</p>
                                 </div>
-                                <input id="dropzone-file" type="file" class="hidden" />
+                                <input type="file" class="hidden" />
                             </label>
                         </div>
                     </div>
+                    <div class="mt-6 flex justify-end">
+                        <button class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-lg font-bold shadow-md transition-all flex items-center gap-2 transform active:scale-95">
+                            Start Quiz <i class="ph-bold ph-arrow-right"></i>
+                        </button>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- 2. Interview Setup Section (NEW) -->
-            <section id="interview-setup" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 150ms;">
-                <h2 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs"><i class="ph-bold ph-gear"></i></span>
-                    Step 2: Configure Interview
-                </h2>
+            <!-- 2. INTERVIEW CONFIG SECTION -->
+            <div id="section-interview" class="hidden opacity-0 transition-all duration-500 ease-in-out space-y-8">
+                
+                <div class="flex items-center gap-4 mb-2">
+                    <button onclick="resetFlow()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="ph-bold ph-arrow-left text-xl"></i></button>
+                    <h2 class="font-display text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">2</span>
+                        Configure Interview
+                    </h2>
+                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Context Uploads -->
-                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
-                        <h3 class="font-bold text-slate-900 mb-4">Context</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Job Description</label>
-                                <textarea class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:border-brand-500 focus:outline-none h-24 resize-none" placeholder="Paste the job description here..."></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Resume</label>
-                                <div class="flex items-center gap-3">
-                                    <button class="flex-1 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm hover:bg-slate-100 transition-colors text-left flex items-center gap-2">
-                                        <i class="ph-bold ph-paperclip"></i> Upload PDF
-                                    </button>
-                                </div>
+                <!-- Context & Settings -->
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Difficulty -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Difficulty</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="difficulty" value="easy" class="peer hidden">
+                                    <div class="py-2 rounded-lg text-sm font-medium text-center border border-slate-200 text-slate-600 hover:bg-slate-50 peer-checked:bg-green-50 peer-checked:text-green-700 peer-checked:border-green-500 peer-checked:border transition-all">Easy</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="difficulty" value="medium" class="peer hidden" checked>
+                                    <div class="py-2 rounded-lg text-sm font-medium text-center border border-slate-200 text-slate-600 hover:bg-slate-50 peer-checked:bg-yellow-50 peer-checked:text-yellow-700 peer-checked:border-yellow-500 peer-checked:border transition-all">Medium</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="difficulty" value="hard" class="peer hidden">
+                                    <div class="py-2 rounded-lg text-sm font-medium text-center border border-slate-200 text-slate-600 hover:bg-slate-50 peer-checked:bg-red-50 peer-checked:text-red-700 peer-checked:border-red-500 peer-checked:border transition-all">Hard</div>
+                                </label>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Settings -->
-                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
-                        <h3 class="font-bold text-slate-900 mb-4">Settings</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Difficulty Level</label>
-                                <div class="grid grid-cols-3 gap-2">
-                                    <button class="bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm hover:border-green-500 hover:text-green-600 hover:bg-green-50 transition-all font-medium">Easy</button>
-                                    <button class="bg-white border-brand-500 text-brand-600 bg-brand-50 py-2 rounded-lg text-sm font-bold shadow-sm ring-1 ring-brand-500">Medium</button>
-                                    <button class="bg-white border border-slate-200 text-slate-600 py-2 rounded-lg text-sm hover:border-red-500 hover:text-red-600 hover:bg-red-50 transition-all font-medium">Hard</button>
-                                </div>
-                            </div>
-                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Focus Area</label>
-                                <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none">
-                                    <option>General</option>
-                                    <option>Data Structures & Algorithms</option>
+                        <!-- Type -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Interview Type</label>
+                            <div class="relative">
+                                <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-brand-500 appearance-none">
+                                    <option>General Mock</option>
+                                    <option>Technical (Coding)</option>
                                     <option>System Design</option>
                                     <option>Behavioral</option>
                                 </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-slate-500">
+                                    <i class="ph-bold ph-caret-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Uploads -->
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Job Description</label>
+                                <textarea class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm h-20 resize-none focus:outline-none focus:border-brand-500" placeholder="Paste JD..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Resume</label>
+                                <label class="border-2 border-dashed border-slate-200 rounded-lg h-20 flex items-center justify-center cursor-pointer hover:bg-slate-50 hover:border-brand-400 transition-colors">
+                                    <span class="text-xs text-slate-500 flex items-center gap-2"><i class="ph-bold ph-paperclip"></i> Upload PDF</span>
+                                    <input type="file" class="hidden" accept=".pdf">
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- 3. Practice Modes Section -->
-            <section id="practice-modes" class="mb-12 opacity-0 animate-slide-up-fade" style="animation-delay: 200ms;">
-                <h2 class="font-display text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-xs"><i class="ph-bold ph-play"></i></span>
-                    Step 3: Start Interview
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Mode Selection -->
+                <div>
+                    <h2 class="font-display text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">3</span>
+                        Select Mode
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Text Mode -->
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="interview_interface" value="text" class="peer hidden">
+                            <div class="bg-white border-2 border-slate-200 p-4 rounded-xl hover:border-brand-400 peer-checked:border-brand-600 peer-checked:bg-brand-50/50 transition-all h-full">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 rounded-lg bg-brand-100 text-brand-600 flex items-center justify-center"><i class="ph-fill ph-chat-centered-text text-xl"></i></div>
+                                    <span class="font-bold text-slate-700">Text Chat</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Chat-based interface.</p>
+                            </div>
+                        </label>
+                        <!-- Audio Mode -->
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="interview_interface" value="audio" class="peer hidden">
+                            <div class="bg-white border-2 border-slate-200 p-4 rounded-xl hover:border-purple-400 peer-checked:border-purple-600 peer-checked:bg-purple-50/50 transition-all h-full">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center"><i class="ph-fill ph-microphone text-xl"></i></div>
+                                    <span class="font-bold text-slate-700">Audio Only</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Speak your answers.</p>
+                            </div>
+                        </label>
+                        <!-- Video Mode -->
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="interview_interface" value="video" class="peer hidden">
+                            <div class="bg-white border-2 border-slate-200 p-4 rounded-xl hover:border-orange-400 peer-checked:border-orange-600 peer-checked:bg-orange-50/50 transition-all h-full">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="ph-fill ph-video-camera text-xl"></i></div>
+                                    <span class="font-bold text-slate-700">Video Call</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Camera on simulation.</p>
+                            </div>
+                        </label>
+                    </div>
                     
-                    <!-- Text / Chatbot Mode (Chatbot Theme) -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-brand-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
-                        <div class="absolute inset-0 bg-gradient-to-b from-brand-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        
-                        <div class="flex justify-between items-start mb-4 relative z-10">
-                            <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-600 flex items-center justify-center">
-                                <i class="ph-fill ph-chat-centered-text text-2xl"></i>
-                            </div>
-                            <span class="bg-brand-100 text-brand-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Chatbot</span>
-                        </div>
-                        
-                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Text Interview</h3>
-                        <p class="text-slate-500 text-sm mb-4 relative z-10">Chat-based interface similar to WhatsApp or Slack.</p>
-                        
-                        <!-- Visual representation of Chat -->
-                        <div class="mt-auto space-y-2 relative z-10">
-                            <div class="flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                                <div class="w-6 h-6 rounded-full bg-slate-200 shrink-0"></div>
-                                <div class="bg-slate-100 rounded-lg rounded-tl-none p-2 text-[10px] w-3/4 shadow-sm">Tell me about yourself.</div>
-                            </div>
-                            <div class="flex gap-2 flex-row-reverse opacity-60 group-hover:opacity-100 transition-opacity">
-                                <div class="w-6 h-6 rounded-full bg-brand-200 shrink-0"></div>
-                                <div class="bg-brand-500 text-white rounded-lg rounded-tr-none p-2 text-[10px] w-3/4 shadow-md">Hi, I'm a developer...</div>
-                            </div>
-                        </div>
+                    <div class="mt-8 flex justify-end">
+                        <button id="btn-start-interview" onclick="startInterview()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold shadow-lg transition-all flex items-center gap-2 transform active:scale-95">
+                            Start Interview <i class="ph-bold ph-arrow-right"></i>
+                        </button>
                     </div>
-
-                    <!-- Audio Mode -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-purple-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
-                        <div class="absolute inset-0 bg-gradient-to-b from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                        <div class="flex justify-between items-start mb-4 relative z-10">
-                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center">
-                                <i class="ph-fill ph-microphone text-2xl"></i>
-                            </div>
-                            <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Voice Only</span>
-                        </div>
-                        
-                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Audio Interview</h3>
-                        <p class="text-slate-500 text-sm mb-4 relative z-10">Speak your answers. Good for practicing fluency.</p>
-                        
-                        <!-- Visual representation of Audio Wave -->
-                        <div class="mt-auto flex items-center justify-center gap-1 h-12 relative z-10 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <div class="w-1 h-4 bg-purple-400 rounded-full animate-pulse"></div>
-                            <div class="w-1 h-8 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
-                            <div class="w-1 h-6 bg-purple-400 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                            <div class="w-1 h-3 bg-purple-300 rounded-full animate-pulse" style="animation-delay: 0.3s"></div>
-                            <div class="w-1 h-7 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.15s"></div>
-                        </div>
-                    </div>
-
-                    <!-- Video Mode -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:border-orange-300 transition-all group cursor-pointer relative overflow-hidden flex flex-col h-64">
-                        <div class="absolute inset-0 bg-gradient-to-b from-orange-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                        <div class="flex justify-between items-start mb-4 relative z-10">
-                            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-                                <i class="ph-fill ph-video-camera text-2xl"></i>
-                            </div>
-                            <span class="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Camera On</span>
-                        </div>
-                        
-                        <h3 class="font-bold text-slate-900 text-lg mb-1 relative z-10">Video Interview</h3>
-                        <p class="text-slate-500 text-sm mb-4 relative z-10">Full simulation with camera. AI analyzes body language.</p>
-                        
-                        <!-- Visual representation of Video Frame -->
-                        <div class="mt-auto relative z-10 opacity-60 group-hover:opacity-100 transition-opacity">
-                            <div class="bg-slate-800 rounded-lg h-24 w-full flex items-center justify-center relative overflow-hidden">
-                                <i class="ph-fill ph-user text-slate-600 text-4xl"></i>
-                                <div class="absolute bottom-2 right-2 w-6 h-4 bg-slate-600 rounded shadow border border-slate-500"></div>
-                                <div class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </section>
+
+            </div>
 
         </main>
     </div>
+
+    <script>
+        // State management
+        let selectedMode = null;
+
+        function enableNextButton() {
+            const btn = document.getElementById('btn-next-step');
+            const radios = document.getElementsByName('practice_mode');
+            
+            for (const radio of radios) {
+                if (radio.checked) {
+                    selectedMode = radio.value;
+                    btn.disabled = false;
+                    btn.classList.remove('bg-slate-300', 'cursor-not-allowed', 'opacity-50');
+                    btn.classList.add('bg-brand-600', 'hover:bg-brand-700', 'cursor-pointer', 'shadow-md', 'transform', 'active:scale-95');
+                    break;
+                }
+            }
+        }
+
+        function goToStep2() {
+            if (!selectedMode) return;
+
+            const selectionFlow = document.getElementById('selection-flow');
+            const mcqSection = document.getElementById('section-mcq');
+            const interviewSection = document.getElementById('section-interview');
+
+            // Hide selection flow
+            selectionFlow.classList.add('hidden');
+
+            // Show relevant section
+            if (selectedMode === 'mcq') {
+                mcqSection.classList.remove('hidden');
+                setTimeout(() => {
+                    mcqSection.classList.remove('opacity-0');
+                    mcqSection.classList.add('opacity-100');
+                }, 10);
+            } else if (selectedMode === 'interview') {
+                interviewSection.classList.remove('hidden');
+                setTimeout(() => {
+                    interviewSection.classList.remove('opacity-0');
+                    interviewSection.classList.add('opacity-100');
+                }, 10);
+            }
+        }
+
+        function resetFlow() {
+            const selectionFlow = document.getElementById('selection-flow');
+            const mcqSection = document.getElementById('section-mcq');
+            const interviewSection = document.getElementById('section-interview');
+            
+            // Hide detail sections
+            mcqSection.classList.add('hidden', 'opacity-0');
+            mcqSection.classList.remove('opacity-100');
+            interviewSection.classList.add('hidden', 'opacity-0');
+            interviewSection.classList.remove('opacity-100');
+
+            // Show selection flow
+            selectionFlow.classList.remove('hidden');
+            // Uncheck radios and disable button
+            const radios = document.getElementsByName('practice_mode');
+            for(const r of radios) r.checked = false;
+            
+            const btn = document.getElementById('btn-next-step');
+            btn.disabled = true;
+            btn.classList.add('bg-slate-300', 'cursor-not-allowed', 'opacity-50');
+            btn.classList.remove('bg-brand-600', 'hover:bg-brand-700', 'cursor-pointer', 'shadow-md', 'transform', 'active:scale-95');
+        }
+
+        function startInterview() {
+            const radios = document.getElementsByName('interview_interface');
+            let selected = null;
+            for (const r of radios) {
+                if (r.checked) { selected = r.value; break; }
+            }
+            if (!selected) {
+                alert('Please select an interview mode (Text / Audio / Video)');
+                return;
+            }
+
+            if (selected === 'text') {
+                // Redirect to text interview route
+                window.location.href = "{{ url_for('text_interview') }}";
+            } else {
+                // For now show a simple message — you can implement audio/video pages later
+                alert('Selected mode ("' + selected + '") is not implemented yet.');
+            }
+        }
+    </script>
 {% endblock %}
