@@ -320,13 +320,26 @@
                 return;
             }
 
+            // Redirect based on selected mode
             if (selected === 'text') {
-                // Redirect to text interview route
                 window.location.href = "{{ url_for('text_interview') }}";
-            } else {
-                // For now show a simple message — you can implement audio/video pages later
-                alert('Selected mode ("' + selected + '") is not implemented yet.');
+                return;
             }
+
+            if (selected === 'audio') {
+                // Adjust the endpoint name if your audio route is different
+                window.location.href = "{{ url_for('audio_interview') }}";
+                return;
+            }
+
+            if (selected === 'video') {
+                // Adjust the endpoint name if your video route is different
+                window.location.href = "{{ url_for('video_interview') }}";
+                return;
+            }
+
+            // Fallback for any unhandled value
+            alert('Selected mode ("' + selected + '") is not implemented yet.');
         }
     </script>
 {% endblock %}
